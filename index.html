@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valorant Guide</title>
+    <style>
+        /* Estilos CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #ff4655;
+            --dark: #0f1923;
+            --light: #f8f8f8;
+            --accent: #0f1923;
+            --agent-duelist: #ff4655;
+            --agent-controller: #1b768e;
+            --agent-sentinel: #8cc269;
+            --agent-initiator: #ce7bd8;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+
+        header {
+            background-color: var(--accent);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .logo h1 {
+            color: var(--light);
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links li a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .nav-links li a:hover {
+            color: var(--primary);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-links li a.active {
+            color: var(--primary);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: var(--light);
+            transition: all 0.3s;
+        }
+
+        .hero {
+            height: 80vh;
+            background: linear-gradient(rgba(15, 25, 35, 0.8), rgba(15, 25, 35, 0.8)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3') center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hero h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: var(--light);
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: var(--light);
+            color: var(--primary);
+        }
+
+        section {
+            padding: 4rem 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary);
+            font-size: 2.5rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tab-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background-color: transparent;
+            color: var(--light);
+            border: 2px solid var(--primary);
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: var(--light);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .agents-grid, .maps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .agent-card, .map-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .agent-card:hover, .map-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .agent-img {
+            height: 250px;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light);
+            font-weight: 600;
+        }
+
+        .agent-info, .map-info {
+            padding: 1.5rem;
+        }
+
+        .agent-role {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .role-duelist {
+            background-color: var(--agent-duelist);
+        }
+
+        .role-controller {
+            background-color: var(--agent-controller);
+        }
+
+        .role-sentinel {
+            background-color: var(--agent-sentinel);
+        }
+
+        .role-initiator {
+            background-color: var(--agent-initiator);
+        }
+
+        .agent-name, .map-name {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .agent-desc, .map-desc {
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+
+        .abilities {
+            margin-top: 1rem;
+        }
+
+        .ability {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .ability-key {
+            width: 30px;
+            height: 30px;
+            background-color: var(--primary);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .comps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .comp-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .comp-map {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .comp-agents {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .comp-agent {
+            background-color: var(--accent);
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .comp-desc {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        footer {
+            background-color: var(--accent);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .social-links a {
+            color: var(--light);
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                flex-direction: column;
+                background-color: var(--accent);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+                padding: 2rem 0;
+                gap: 0;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                margin: 1.5rem 0;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hamburger.active div:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active div:nth-child(1) {
+                transform: translateY(9px) rotate(45deg);
+            }
+
+            .hamburger.active div:nth-child(3) {
+                transform: translateY(-9px) rotate(-45deg);
+            }
+
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+
+            .agents-grid, .maps-grid, .comps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho e Navegação -->
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>VALORANT GUIDE</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#agentes">Agentes</a></li>
+                <li><a href="#mapas">Mapas</a></li>
+                <li><a href="#comps">Composições</a></li>
+            </ul>
+            <div class="hamburger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <h2>DOMINE O JOGO</h2>
+        <p>Guia completo com todos os agentes, mapas e as melhores composições para elevar seu jogo no Valorant</p>
+        <a href="#agentes" class="btn">Explorar Agentes</a>
+    </section>
+
+    <!-- Agentes Section -->
+    <section id="agentes">
+        <div class="container">
+            <h2 class="section-title">AGENTES</h2>
+            <div class="tab-buttons">
+                <button class="tab-btn active" data-tab="duelistas">Duelistas</button>
+                <button class="tab-btn" data-tab="controladores">Controladores</button>
+                <button class="tab-btn" data-tab="sentinelas">Sentinelas</button>
+                <button class="tab-btn" data-tab="iniciadores">Iniciadores</button>
+            </div>
+
+            <div class="tab-content active" id="duelistas">
+                <div class="agents-grid">
+                    <!-- Conteúdo gerado por JavaScript -->
+                </div>
+            </div>
+
+            <div class="tab-content" id="controladores">
+                <div class="agents-grid">
+                    <!-- Conteúdo gerado por JavaScript -->
+                </div>
+            </div>
+
+            <div class="tab-content" id="sentinelas">
+                <div class="agents-grid">
+                    <!-- Conteúdo gerado por JavaScript -->
+                </div>
+            </div>
+
+            <div class="tab-content" id="iniciadores">
+                <div class="agents-grid">
+                    <!-- Conteúdo gerado por JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mapas Section -->
+    <section id="mapas">
+        <div class="container">
+            <h2 class="section-title">MAPAS</h2>
+            <div class="maps-grid">
+                <!-- Conteúdo gerado por JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Composições Section -->
+    <section id="comps">
+        <div class="container">
+            <h2 class="section-title">MELHORES COMPOSIÇÕES</h2>
+            <div class="comps-grid">
+                <!-- Conteúdo gerado por JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>VALORANT GUIDE - Site não oficial para fins educacionais</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-discord"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p>© 2023 Valorant Guide. Todos os direitos reservados à Riot Games.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Dados dos Agentes
+        const agents = {
+            duelistas: [
+                {
+                    name: "Jett",
+                    role: "Duelista",
+                    description: "Jett é uma ágil e evasiva duelista coreana que corre com o vento para eliminar inimigos.",
+                    abilities: [
+                        { key: "Q", name: "Corrente Ascendente", description: "Impulsiona Jett alto no ar." },
+                        { key: "E", name: "Brisa de Impulso", description: "Impulsiona Jett na direção do movimento atual." },
+                        { key: "C", name: "Erupção das Brumas", description: "Lança projectiles que se expandem em visão bloqueante." },
+                        { key: "X", name: "Tormenta de Aço", description: "Armamento com várias lâminas de precisão." }
+                    ]
+                },
+                {
+                    name: "Phoenix",
+                    role: "Duelista",
+                    description: "Phoenix é um britânico poderoso que entra no combate com fogo e estilo.",
+                    abilities: [
+                        { key: "Q", name: "Bola Curva", description: "Lança uma bola de fogo que cega quem olhar." },
+                        { key: "E", name: "Mãos Quentes", description: "Lança uma bola de fogo que causa dano em área." },
+                        { key: "C", name: "Labareda", description: "Cria uma parede de fogo que bloqueia visão e causa dano." },
+                        { key: "X", name: "Renascimento", description: "Prepara um marcador que ressuscita Phoenix ao morrer." }
+                    ]
+                },
+                {
+                    name: "Raze",
+                    role: "Duelista",
+                    description: "Raze chega de Salvador com muita explosão e personalidade.",
+                    abilities: [
+                        { key: "Q", name: "Carga de Explosivos", description: "Lança uma granada que causa dano em área." },
+                        { key: "E", name: "Cartuchos de Tinta", description: "Lança grenades that deal damage and create sub-munitions." },
+                        { key: "C", name: "Bumba", description: "Dispara um robô que avança em linha reta e explode." },
+                        { key: "X", name: "Estraga-prazeres", description: "Dispara um foguete que causa dano massivo em área." }
+                    ]
+                },
+                {
+                    name: "Reyna",
+                    role: "Duelista",
+                    description: "Reyna é uma duelista mexicana que domina combates individuais.",
+                    abilities: [
+                        { key: "Q", name: "Devorar", description: "Consume uma alma para se curar rapidamente." },
+                        { key: "E", name: "Dispensar", description: "Consume uma alma para ficar intangível." },
+                        { key: "C", name: "Olhar Voraz", description: "Lança um olho etéreo que nega a visão dos inimigos." },
+                        { key: "X", name: "Imperatriz", description: "Entra em estado de frenesi, aumentando drasticamente suas habilidades." }
+                    ]
+                }
+            ],
+            controladores: [
+                {
+                    name: "Brimstone",
+                    role: "Controlador",
+                    description: "Brimstone é um comando americano que fornece utilidade estratégica com seu arsenal orbital.",
+                    abilities: [
+                        { key: "Q", name: "Incendiário", description: "Equipa um lançador de granadas incendiárias." },
+                        { key: "E", name: "Fumaça Celeste", description: "Equipa um mapa tático para lançar fumaças de longa duração." },
+                        { key: "C", name: "Sinalizador Estimulante", description: "Lança um sinalizador que aumenta a taxa de disparo." },
+                        { key: "X", name: "Ataque Orbital", description: "Equipa um mapa tático para alvejar um ataque orbital a laser." }
+                    ]
+                },
+                {
+                    name: "Viper",
+                    role: "Controlador",
+                    description: "Viper é uma química americana que usa dispositivos de veneno para controlar o campo de batalha.",
+                    abilities: [
+                        { key: "Q", name: "Nuvem Venenosa", description: "Lança um emissor de gás que pode ser reativado." },
+                        { key: "E", name: "Cortina Tóxica", description: "Cria uma longa linha de gás tóxico." },
+                        { key: "C", name: "Veneno de Cobra", description: "Lança um frasco que se rompe em uma poça de produto químico." },
+                        { key: "X", name: "Poço de Peçonha", description: "Cobre uma área grande em uma nuvem tóxica que reduz visão e vida." }
+                    ]
+                }
+            ],
+            sentinelas: [
+                {
+                    name: "Sage",
+                    role: "Sentinela",
+                    description: "Sage é uma support chinesa que garante segurança para ela mesma e para sua equipe.",
+                    abilities: [
+                        { key: "Q", name: "Orbe de Lentidão", description: "Lança um orbe que cria um campo desacelerador." },
+                        { key: "E", name: "Orbe de Cura", description: "Cura um aliado ou a si mesma ao longo do tempo." },
+                        { key: "C", name: "Orbe de Barreira", description: "Conjura uma parede de gelo sólido." },
+                        { key: "X", name: "Ressurreição", description: "Alveja um aliado morto para revive-lo após um breve canal." }
+                    ]
+                },
+                {
+                    name: "Cypher",
+                    role: "Sentinela",
+                    description: "Cypher é um vigilante marroquino que vigia cada movimento do inimigo.",
+                    abilities: [
+                        { key: "Q", name: "Gaiola Cibernética", description: "Lança uma gaiola que bloqueia a visão e reduz a velocidade." },
+                        { key: "E", name: "Câmera de Vigilância", description: "Coloca uma câmera em um local para vigilância." },
+                        { key: "C", name: "Fio-Armadilha", description: "Coloca um fio entre duas paredes que revela inimigos." },
+                        { key: "X", name: "Assalto Neural", description: "Revela a localização de todos os inimigos vivos." }
+                    ]
+                }
+            ],
+            iniciadores: [
+                {
+                    name: "Sova",
+                    role: "Iniciador",
+                    description: "Sova é um rastreador russo que caça, encontra e elimina inimigos com eficiência.",
+                    abilities: [
+                        { key: "Q", name: "Flecha de Choque", description: "Lança uma flecha que emite uma explosão upon impact." },
+                        { key: "E", name: "Flecha Rastreadora", description: "Lança uma flecha que revela a localização de inimigos próximos." },
+                        { key: "C", name: "Drone Coruja", description: "Controla um drone que pode disparar dardos de revelação." },
+                        { key: "X", name: "Fúria do Caçador", description: "Dispara até três disparos de energia que atravessam paredes." }
+                    ]
+                },
+                {
+                    name: "Breach",
+                    role: "Iniciador",
+                    description: "Breach é um iniciador sueco que avança com força bruta para abrir caminho para si e para sua equipe.",
+                    abilities: [
+                        { key: "Q", name: "Ponto de Ignição", description: "Cega todos os jogadores que estiverem olhando." },
+                        { key: "E", name: "Falha Tectônica", description: "Cria uma explosão sísmica através de superfícies." },
+                        { key: "C", name: "Pós-Choque", description: "Lança uma carga de fusão que se prende a superfícies." },
+                        { key: "X", name: "Ondas de Choque", description: "Dispara um terremoto em cascata por todo o terreno num cone." }
+                    ]
+                }
+            ]
+        };
+
+        // Dados dos Mapas
+        const maps = [
+            {
+                name: "Ascent",
+                description: "Um mapa com um território aberto que permite confrontos à média e longa distância.",
+                image: "ascent"
+            },
+            {
+                name: "Bind",
+                description: "Dois pontos que dispensam rotas intermediárias. Teleportadores conectam os lados do mapa.",
+                image: "bind"
+            },
+            {
+                name: "Haven",
+                description: "O único mapa com três pontos para plantar a Spike, oferecendo mais opções de ataque.",
+                image: "haven"
+            },
+            {
+                name: "Split",
+                description: "Mapa com áreas elevadas e rotas divididas que exigem escalada para acesso.",
+                image: "split"
+            },
+            {
+                name: "Icebox",
+                description: "Um ambiente de estaleiro com terreno verticalmente desafiador e múltiplas plataformas.",
+                image: "icebox"
+            },
+            {
+                name: "Breeze",
+                description: "Um paraíso tropical com áreas abertas e rotas que favorecem combates à longa distância.",
+                image: "breeze"
+            },
+            {
+                name: "Fracture",
+                description: "Um centro de pesquisa com um layout único que divide o mapa em quatro zonas distintas.",
+                image: "fracture"
+            }
+        ];
+
+        // Dados das Composições
+        const comps = [
+            {
+                map: "Ascent",
+                agents: ["Sova", "Killjoy", "Jett", "Omen", "Skye"],
+                description: "Sova para reconhecimento, Killjoy para defesa do ponto, Jett para entrada agressiva, Omen para fumaças e Skye para suporte e informações."
+            },
+            {
+                map: "Bind",
+                agents: ["Viper", "Raze", "Skye", "Cypher", "Reyna"],
+                description: "Viper para controle de áreas, Raze para limpar espaços fechados, Skye para informações, Cypher para vigilância e Reyna para duelos."
+            },
+            {
+                map: "Haven",
+                agents: ["Astra", "Sova", "Jett", "Killjoy", "Skye"],
+                description: "Astra para controle global, Sova para reconhecimento, Jett para mobilidade, Killjoy para defesa e Skye para suporte."
+            },
+            {
+                map: "Split",
+                agents: ["Viper", "Raze", "Jett", "Sage", "Skye"],
+                description: "Viper para controle de áreas, Raze para explosivos em corredores estreitos, Jett para mobilidade vertical, Sage para cura e defesa, Skye para informações."
+            },
+            {
+                map: "Icebox",
+                agents: ["Sage", "Viper", "Jett", "Sova", "Reyna"],
+                description: "Sage para controle de áreas com barreiras, Viper para fumaças e controle, Jett para mobilidade vertical, Sova para reconhecimento e Reyna para duelos."
+            },
+            {
+                map: "Breeze",
+                agents: ["Viper", "Jett", "Sova", "Skye", "Cypher"],
+                description: "Viper para controle de áreas amplas, Jett para mobilidade, Sova para reconhecimento de longa distância, Skye para informações e Cypher para vigilância."
+            },
+            {
+                map: "Fracture",
+                agents: ["Brimstone", "Raze", "Breach", "Killjoy", "Jett"],
+                description: "Brimstone para fumaças e utilidade, Raze para limpar áreas, Breach para desalojar inimigos, Killjoy para defesa e Jett para mobilidade."
+            }
+        ];
+
+        // Função para renderizar agentes
+        function renderAgents() {
+            for (const role in agents) {
+                const container = document.getElementById(role);
+                container.innerHTML = '';
+                
+                agents[role].forEach(agent => {
+                    const agentCard = document.createElement('div');
+                    agentCard.className = 'agent-card';
+                    
+                    let roleClass = '';
+                    switch(agent.role) {
+                        case 'Duelista': roleClass = 'role-duelist'; break;
+                        case 'Controlador': roleClass = 'role-controller'; break;
+                        case 'Sentinela': roleClass = 'role-sentinel'; break;
+                        case 'Iniciador': roleClass = 'role-initiator'; break;
+                    }
+                    
+                    agentCard.innerHTML = `
+                        <div class="agent-img">Imagem de ${agent.name}</div>
+                        <div class="agent-info">
+                            <span class="agent-role ${roleClass}">${agent.role}</span>
+                            <h3 class="agent-name">${agent.name}</h3>
+                            <p class="agent-desc">${agent.description}</p>
+                            <div class="abilities">
+                                ${agent.abilities.map(ability => `
+                                    <div class="ability">
+                                        <div class="ability-key">${ability.key}</div>
+                                        <div class="ability-info">
+                                            <h4>${ability.name}</h4>
+                                            <p>${ability.description}</p>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                    
+                    container.appendChild(agentCard);
+                });
+            }
+        }
+
+        // Função para renderizar mapas
+        function renderMaps() {
+            const container = document.querySelector('.maps-grid');
+            
+            maps.forEach(map => {
+                const mapCard = document.createElement('div');
+                mapCard.className = 'map-card';
+                
+                mapCard.innerHTML = `
+                    <div class="agent-img">Imagem de ${map.name}</div>
+                    <div class="map-info">
+                        <h3 class="map-name">${map.name}</h3>
+                        <p class="map-desc">${map.description}</p>
+                    </div>
+                `;
+                
+                container.appendChild(mapCard);
+            });
+        }
+
+        // Função para renderizar composições
+        function renderComps() {
+            const container = document.querySelector('.comps-grid');
+            
+            comps.forEach(comp => {
+                const compCard = document.createElement('div');
+                compCard.className = 'comp-card';
+                
+                compCard.innerHTML = `
+                    <h3 class="comp-map">${comp.map}</h3>
+                    <div class="comp-agents">
+                        ${comp.agents.map(agent => `<span class="comp-agent">${agent}</span>`).join('')}
+                    </div>
+                    <p class="comp-desc">${comp.description}</p>
+                `;
+                
+                container.appendChild(compCard);
+            });
+        }
+
+        // Função para alternar abas
+        function setupTabs() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active class from all buttons and content
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    btn.classList.add('active');
+                    
+                    // Show corresponding content
+                    const tabId = btn.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        }
+
+        // Função para menu mobile
+        function setupMobileMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+            
+            // Fechar menu ao clicar em um link
+            document.querySelectorAll('.nav-links li a').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    navLinks.classList.remove('active');
+                });
+            });
+        }
+
+        // Inicialização quando o DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAgents();
+            renderMaps();
+            renderComps();
+            setupTabs();
+            setupMobileMenu();
+        });
+    </script>
+</body>
+</html>
